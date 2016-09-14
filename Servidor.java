@@ -46,14 +46,24 @@ public class Servidor {
                    public void run() {
                        try {
                            System.out.println("Nueva Conexión");
+                           ObjectInputStream input = new ObjectInputStream(accept.getInputStream());
+
+
+
+
                            BufferedReader br = new BufferedReader(new InputStreamReader(accept.getInputStream()));
                            PrintWriter out = new PrintWriter(accept.getOutputStream(), true);
 
                            String in;
 
-                           while((in=br.readLine()) != null) {
+
+                           while(true) {
+                               MBigram bigram = (MBigram)input.readObject();
+
+                               in = bigram.getBigram();
                                in=in.toLowerCase();
                                out.println("El bigrama " + in+  " aparece "+  bigramController.searchBigram(in) + " veces.");
+                               //input.flush();
                            }
                        } catch (Exception ex) {
 

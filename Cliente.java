@@ -8,9 +8,6 @@ import java.util.Scanner;
 
 public class Cliente {
 
-    DataOutputStream output;
-    DataInputStream input;
-
 
     public Cliente()
     {
@@ -26,11 +23,13 @@ public class Cliente {
             //create socket
             echo = new Socket("localhost", 8888);
 
-            PrintWriter out = new PrintWriter(echo.getOutputStream(), true);
+            //PrintWriter out = new PrintWriter(echo.getOutputStream(), true);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(echo.getInputStream()));
 
             BufferedReader stdbr = new BufferedReader(new InputStreamReader(System.in));
+
+            ObjectOutputStream outputStream = new ObjectOutputStream(echo.getOutputStream());
 
 
             //program
@@ -39,10 +38,12 @@ public class Cliente {
             while ((in=stdbr.readLine()) != null) {
 
                 //write to socket out stream
-                out.println(in);
-
+                MBigram bigram = new MBigram(in, 0);
+                outputStream.writeObject(bigram);
+                
                 //read from in stream and write out
                 System.out.println("res->: "+br.readLine());
+                outputStream.flush();
                 System.out.println("Escriba el siguiente bigrama :");
             }
 
